@@ -1,0 +1,61 @@
+The useState hook is one of the most fundamental hooks in React, allowing you to add state to functional components. Here’s a simple example demonstrating how to use the useState hook in a functional component to manage a counter:
+Step 1: Set up the project
+Make sure you have a React project set up. You can create one using Create React App if you haven't already:
+bash
+Copy code
+npx create-react-app usestate-example
+cd usestate-example
+npm start
+Step 2: Create a Counter component
+Create a simple Counter component that uses the useState hook to manage the count state.
+Counter.js:
+jsx
+Copy code
+import React, { useState } from 'react';
+
+function Counter() {
+  // Declare a state variable named "count" with an initial value of 0
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+
+export default Counter;
+Step 3: Use the Counter component in App
+Import and use the Counter component in your main App component.
+App.js:
+jsx
+Copy code
+import React from 'react';
+import Counter from './Counter';
+
+function App() {
+  return (
+    <div className="App">
+      <h1>Simple useState Example</h1>
+      <Counter />
+    </div>
+  );
+}
+
+export default App;
+Explanation:
+1.	useState Hook:
+o	useState is a React hook that allows you to add state to functional components.
+o	useState takes the initial state as an argument and returns an array containing the current state and a function to update it.
+o	In the Counter component, useState(0) initializes the count state variable to 0.
+o	setCount is a function that updates the count state variable.
+2.	Counter Component:
+o	The Counter component renders a paragraph displaying the current count and a button.
+o	When the button is clicked, it calls setCount(count + 1), which updates the count state variable, causing the component to re-render with the updated count.
+Step 4: Run the application
+Run your application using npm start. When you click the "Click me" button, the count should increase.
+This simple example demonstrates how to use the useState hook to manage state in a functional component. The useState hook is very powerful and can be used to manage more complex state in larger applications.
+
