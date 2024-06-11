@@ -1,0 +1,81 @@
+The useEffect hook in React allows you to perform side effects in functional components. Examples of side effects include data fetching, subscriptions, and manually changing the DOM. useEffect runs after the component renders and can optionally clean up after itself to avoid memory leaks.
+Here's a simple example demonstrating how to use the useEffect hook in a functional component to fetch data from an API:
+Step 1: Set up the project
+Make sure you have a React project set up. You can create one using Create React App if you haven't already:
+npx create-react-app useeffect-example
+cd useeffect-example
+npm start
+Step 2: Create a DataFetcher component
+Create a DataFetcher component that uses the useEffect hook to fetch data from an API.
+DataFetcher.js:
+import React, { useState, useEffect } from 'react';
+
+function DataFetcher() {
+  // Declare state variables for data and loading state
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Define a function to fetch data
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
+        const result = await response.json();
+        setData(result);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
+
+    // Call the fetchData function
+    fetchData();
+  }, []); // Empty dependency array ensures this effect runs only once after the initial render
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h2>Fetched Data:</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
+    </div>
+  );
+}
+
+export default DataFetcher;
+Step 3: Use the DataFetcher component in App
+Import and use the DataFetcher component in your main App component.
+App.js:
+import React from 'react';
+import DataFetcher from './DataFetcher';
+
+function App() {
+  return (
+    <div className="App">
+      <h1>Simple useEffect Example</h1>
+      <DataFetcher />
+    </div>
+  );
+}
+
+export default App;
+Explanation:
+1.	useState Hook:
+o	useState is used to create data and loading state variables.
+o	data will store the fetched data, and loading indicates whether the data is being loaded.
+2.	useEffect Hook:
+o	useEffect is used to perform the side effect of fetching data.
+o	The fetchData function is defined inside the useEffect hook and is called immediately.
+o	The empty dependency array [] means this effect runs only once after the initial render, mimicking the behavior of componentDidMount in class components.
+o	If the fetch is successful, the data state is updated with the result, and loading is set to false.
+o	If there is an error, it is caught and logged, and loading is set to false.
+3.	DataFetcher Component:
+o	This component fetches data from a placeholder API and displays it.
+o	It shows a loading message while the data is being fetched and displays the fetched data once it's available.
+Step 4: Run the application
+Run your application using npm start. You should see "Loading..." initially, and then it will display the fetched data once it is loaded.
+This example demonstrates how to use the useEffect hook to perform a side effect (fetching data) in a functional component. You can use useEffect for a wide range of side effects, such as setting up subscriptions, timers, and more.
+
