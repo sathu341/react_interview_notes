@@ -1,0 +1,78 @@
+The useMemo hook in React is used to memoize a computed value, ensuring that the value is recalculated only when one of its dependencies changes. This can help optimize performance by avoiding expensive calculations on every render.
+Here’s a simple example demonstrating how to use the useMemo hook in a functional component to memoize a computed value:
+Step 1: Set up the project
+Make sure you have a React project set up. You can create one using Create React App if you haven't already:
+npx create-react-app usememo-example
+cd usememo-example
+npm start
+Step 2: Create a component that uses useMemo
+Create a ExpensiveComputation component that uses the useMemo hook to memoize the result of an expensive computation.
+ExpensiveComputation.js:
+import React, { useState, useMemo } from 'react';
+
+function ExpensiveComputation() {
+  const [count, setCount] = useState(0);
+  const [otherCount, setOtherCount] = useState(0);
+
+  // An expensive computation function
+  const expensiveComputation = (num) => {
+    console.log('Computing...');
+    for (let i = 0; i < 1000000000; i++) {} // Simulate expensive computation
+    return num * 2;
+  };
+
+  // Memoize the result of the expensive computation
+  const computedValue = useMemo(() => expensiveComputation(count), [count]);
+
+  return (
+    <div>
+      <h1>useMemo Example</h1>
+      <div>
+        <p>Count: {count}</p>
+        <button onClick={() => setCount(count + 1)}>Increment Count</button>
+      </div>
+      <div>
+        <p>Other Count: {otherCount}</p>
+        <button onClick={() => setOtherCount(otherCount + 1)}>Increment Other Count</button>
+      </div>
+      <div>
+        <p>Computed Value: {computedValue}</p>
+      </div>
+    </div>
+  );
+}
+
+export default ExpensiveComputation;
+Step 3: Use the ExpensiveComputation component in App
+Import and use the ExpensiveComputation component in your main App component.
+App.js:
+import React from 'react';
+import ExpensiveComputation from './ExpensiveComputation';
+
+function App() {
+  return (
+    <div className="App">
+      <ExpensiveComputation />
+    </div>
+  );
+}
+
+export default App;
+Explanation:
+1.	useState Hook:
+o	useState is used to create count and otherCount state variables.
+o	count will trigger the expensive computation when it changes, while otherCount is an independent state variable.
+2.	useMemo Hook:
+o	useMemo is used to memoize the result of the expensiveComputation function.
+o	useMemo takes two arguments: a function that returns the computed value, and a dependency array.
+o	The expensive computation (expensiveComputation(count)) is only recalculated when count changes.
+o	If count has not changed, useMemo returns the memoized result from the previous render, avoiding unnecessary recomputation.
+3.	ExpensiveComputation Component:
+o	This component includes two buttons to increment count and otherCount.
+o	The computedValue is the result of the memoized expensive computation.
+o	When the "Increment Count" button is clicked, the count state is updated, and the expensive computation is recalculated.
+o	When the "Increment Other Count" button is clicked, only the otherCount state is updated, and the expensive computation is not recalculated.
+Step 4: Run the application
+Run your application using npm start. You should see the ExpensiveComputation component. When you click the "Increment Count" button, you should see the "Computing..." message in the console and the computed value should update. When you click the "Increment Other Count" button, the otherCount should update without triggering the expensive computation.
+This example demonstrates how to use the useMemo hook to optimize performance by memoizing the result of an expensive computation. You can use useMemo in your applications to avoid unnecessary recalculations and improve performance.
+
