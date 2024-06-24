@@ -1,5 +1,10 @@
-The useMemo hook in React is used to memoize a computed value, ensuring that the value is recalculated only when one of its dependencies changes. This can help optimize performance by avoiding expensive calculations on every render.
-Here’s a simple example demonstrating how to use the useMemo hook in a functional component to memoize a computed value:
+The useMemo hook in React is used to memoize a computed value, 
+ensuring that the value is recalculated only when one of its
+dependencies changes. This can help optimize performance by 
+avoiding expensive calculations on every render.
+Here’s a simple example demonstrating how to use the useMemo hook 
+in a functional component to memoize a computed value:
+
 Step 1: Set up the project
 Make sure you have a React project set up. You can create one using Create React App if you haven't already:
 npx create-react-app usememo-example
