@@ -1,0 +1,140 @@
+authen.js 
+
+import { createContext } from "react";
+const authen=createContext({})
+export default authen;
+
+App.jsx
+import {Routes,Route} from'react-router-dom'
+import HomePage from './todolist/homepage'
+import Navbars from './todolist/navbar'
+import ToDOLists from './todolist/todolits'
+import AddTask from './todolist/addtask'
+import EditPage from './todolist/edit'
+import Register from './user/register'
+import Login from './user/login'
+import UserHome from './user/userhome'
+import authen from './context/authen'
+import { useState } from 'react'
+
+function App() {
+const [isLogin,setLogin]=useState(false)
+
+  return (
+    <>
+    <authen.Provider value={{status:isLogin,setLogin:setLogin}}>
+    <Routes>
+      <Route path="/" element={<HomePage/>}></Route>
+         
+      <Route path="/register" element={<Register/>}></Route>
+      <Route path="/login" element={<Login/>}></Route>
+      <Route path="/userhome/*" element={<UserHome/>}></Route>
+
+    </Routes>
+    </authen.Provider>
+    
+     
+    </>
+  )
+}
+
+export default App
+
+login.jsx
+import { useState } from "react"
+import AXIOS  from  'axios'
+import Navbars from "../todolist/navbar"
+import { useNavigate } from "react-router-dom"
+import authen from "../context/authen";
+import { useContext } from "react";
+export default  function Login(){
+  const login=useContext(authen)//{status:false,setLogin:setLogin()}
+    const nav=useNavigate()
+    const [user,setUser]=useState({})
+    const  handleChange=(e)=>{
+        setUser({...user,[e.target.name]:e.target.value})
+    }
+    const  handleSubmit=(e)=>{
+        e.preventDefault()
+        console.log(user)
+        const  url="http://localhost:9000/user/login"
+        AXIOS.post(url,user)
+        .then((res)=>{
+            const response=res.data; //{status:1,msg:''}
+            if(response.status==1){
+                alert(response.msg)
+                localStorage.setItem('userN',response.username)
+                sessionStorage.setItem('userid',response.userid)
+                sessionStorage.setItem('username',response.username)
+                login.setLogin(true)
+                nav("/userhome")
+            }
+            else{
+                alert(response.msg)
+            }
+        })
+        .catch(err=>console.log(err))
+    }
+    return(
+        <>
+        <Navbars/>
+        {login.status?"isLogin":"Not Login"}
+        <form method="post" onSubmit={handleSubmit}>
+           
+               <input 
+             type="email"
+             name="email"
+             placeholder="email"
+             onChange={handleChange}
+             required
+             />
+               <input 
+             type="password"
+             name="password"
+             placeholder="password"
+             onChange={handleChange}
+             required
+             />
+               
+             <button  
+               type="submit"
+               >
+               Sign In
+               </button>
+
+        </form>
+        </>
+    )
+} 
+usehome.jsx
+import { Routes,Route } from "react-router-dom";
+import UserNavbars from "./usernav";
+import ToDOLists from "../todolist/todolits";
+import Addtask from "../todolist/addtask";
+import EditPage from "../todolist/edit";
+import authen from "../context/authen";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+export default function UserHome(){
+    const username=sessionStorage.getItem('username')
+    const userN=localStorage.getItem('userN')
+    const login=useContext(authen)
+    const nav=useNavigate()
+    useEffect(()=>{
+        (!login.status)?nav("/login"):""
+    },[])
+    return(
+        <>
+      
+        <UserNavbars/>
+        <h1> {username && `Welcome, ${username}`}</h1>
+        <h2>{userN}</h2>
+        <Routes>
+            <Route path="/todolist" element={<ToDOLists/>}></Route>
+            <Route path="/addtask" element={<Addtask/>}></Route>
+            <Route  path="/editpage/:taskid" element={<EditPage/>}></Route>
+        </Routes>
+
+        </>
+    )
+}
