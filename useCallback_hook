@@ -8,7 +8,9 @@ function App() {
 
   // useCallback to memoize the increment function
   const increment = useCallback(() => {
-    setCount(prevCount => prevCount + 1);
+    setCount(prevCount => prevCount + 1); 
+  
+   
   }, []);
 
   return (
